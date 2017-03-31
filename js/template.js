@@ -4,7 +4,7 @@ function template(data, t, e) {
     while (i < a.length) {
         if (i % 2 == 0) {
             if (a != "")
-                s += "outStr+='" + a[i].replace(/\s*/g, "") + "';";
+                s += "outStr+='" + a[i].replace(/^\s*|\s*$/, "") + "';";
         } else {
             if (a[i].indexOf("=") == 0)
                 s += "outStr+=" + a[i].substr(1) + ";";
