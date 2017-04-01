@@ -17,7 +17,7 @@ function templateOld(data, t, e) {
             eval(s);
         }catch(e){
             console.error(e);
-            outStr="{template error}";
+            var outStr="{template error}";
         }
         if (ele)
             ele.innerHTML = outStr;
@@ -31,7 +31,7 @@ function template(data, t, e) {
             eval(s);
         }catch(e){
             console.error(e);
-            outStr="{template error}";
+            var outStr="{template error}";
         }
         if (ele)
             ele.innerHTML = outStr;
