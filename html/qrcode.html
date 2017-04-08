@@ -91,7 +91,7 @@
         <ul id="tabCon">
             <li class="active">
                 <input type="text" name="" id="text">
-                <button onclick="generate()">生成二维码</button>
+                <button id="generate">生成二维码</button>
                 <div id="qrcode"></div>
             </li><li>
                 <input type="text" name="" id="show1">
@@ -116,12 +116,13 @@
     discernQR("show1", "fileImg","img");
     scanQR("show2","scanBtn","video","canvas");
 
-    function generate() {
+    $("#generate").click(function(){
         $("#qrcode").empty();
         $("#qrcode").qrcode({
             text: utf16to8($("#text").val())
         });
-    }
+    });
+
     function utf16to8(str){
         var out, i, len, c;
         out = "";
@@ -142,7 +143,6 @@
         return out;
     }
     function discernQR(showcon, fileBtn,imgCon) {
-        
             var fileImg = document.getElementById(fileBtn),
                 text = document.getElementById(showcon),
                 imgCon=document.getElementById(imgCon);
@@ -189,7 +189,7 @@
                 var front = true;
             }
             if (navigator.mediaDevices&&navigator.mediaDevices.getUserMedia) {
-                var p = navigator.mediaDevices.getUserMedia({
+                navigator.mediaDevices.getUserMedia({
                     video: {
                         facingMode: (front ? "user" : "environment"),
                         width: {
@@ -204,8 +204,7 @@
                         }
                     },
                     audio: false
-                });
-                p.then(function(stream) {
+                }).then(function(stream) {
                     blob=window.URL.createObjectURL(stream)
                     video.src = blob || stream;
                     video.onloadedmetadata=function(){
@@ -228,10 +227,9 @@
                                     stream.stop();
                                 }
                             };
-                        }, 500);
+                        }, 350);
                     }
-                });
-                p.catch(function(err) {
+                }).catch(function(err) {
                      alert("摄像头异常！")
                 });
             } else if (navigator.getUserMedia) {
@@ -264,7 +262,7 @@
                                         stream.stop();
                                     }
                                 };
-                            }, 500);
+                            }, 350);
                         }
                     },
                     function(err) {
