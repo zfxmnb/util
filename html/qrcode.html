@@ -147,7 +147,7 @@
                 text = document.getElementById(showcon),
                 imgCon=document.getElementById(imgCon);
             fileImg.onchange = function() {
-                if(FileReader){
+                if(window.FileReader){
                     var file = new FileReader();
                     var img = this.files[0],
                         filter = /^image\/.*/;
