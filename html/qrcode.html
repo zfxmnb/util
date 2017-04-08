@@ -182,7 +182,7 @@
             } else {
                 var front = true;
             }
-            if (navigator.mediaDevices.getUserMedia) {
+            if (navigator.mediaDevices&&navigator.mediaDevices.getUserMedia) {
                 var p = navigator.mediaDevices.getUserMedia({
                     video: {
                         facingMode: (front ? "user" : "environment"),
