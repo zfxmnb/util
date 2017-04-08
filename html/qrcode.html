@@ -94,17 +94,17 @@
                 <button onclick="generate()">生成二维码</button>
                 <div id="qrcode"></div>
             </li><li>
-                <input type="text" name="" id="show1" readonly>
+                <input type="text" name="" id="show1">
                 <label for="fileImg">上次图片</label>
                 <input type="file" name="" id="fileImg">
                 <img id="img">
             </li><li>
-                <input type="text" name="" id="show2" readonly>
-                <button onclick="scanQR('show2');">扫码</button>
+                <input type="text" name="" id="show2">
+                <button id="scanBtn">扫码</button>
                 <video id="video" src=""></video>
                 <canvas id="canvas" style="max-width:800px;"></canvas>
             </li>
-        </ul>    
+        </ul>
     </div>
     <script type="text/javascript">
     $("#tabTitle li").click(function(){
@@ -113,6 +113,8 @@
         $(this).addClass("active");
         $("#tabCon li").eq(index).addClass("active");
     })
+    discernQR("show1", "fileImg","img");
+    scanQR("show2","scanBtn","video","canvas");
 
     function generate() {
         $("#qrcode").empty();
@@ -139,10 +141,8 @@
         }
         return out;
     }
-    discernQR("show1", "fileImg","img");
-
-    function discernQR(showcon, filebutton,imgCon) {
-        var fileImg = document.getElementById(filebutton),
+    function discernQR(showcon, fileBtn,imgCon) {
+        var fileImg = document.getElementById(fileBtn),
             text = document.getElementById(showcon),
             imgCon=document.getElementById(imgCon);
         var file = new FileReader();
@@ -163,80 +163,49 @@
             }
         }
     }
-
-    function scanQR(showcon) {
-        var video = document.getElementById('video');
-        var canvas = document.getElementById('canvas');
+    function scanQR(showcon,scanBtn,videoEle,canvasEle) {
+        var t,blob;
+        var video = document.getElementById(videoEle);
+        var canvas = document.getElementById(canvasEle);
         var text = document.getElementById(showcon);
-        video.style.display = "block";
-        navigator.getUserMedia = navigator.getUserMedia ||
-            navigator.webkitGetUserMedia ||
-            navigator.mozGetUserMedia;
-        window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
-        if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|SymbianOS)/i)) {
-            var front = false;
-        } else {
-            var front = true;
-        }
-        if (navigator.mediaDevices.getUserMedia) {
-            var p = navigator.mediaDevices.getUserMedia({
-                video: {
-                    facingMode: (front ? "user" : "environment"),
-                    width: {
-                        ideal: 900,
-                        min:300,
-                        max:1200
-                    },
-                    height: {
-                        ideal: 600,
-                        min:200,
-                        max:800
-                    }
-                },
-                audio: false
-            });
-            p.then(function(stream) {
-                video.src = window.URL.createObjectURL(stream) || stream;
-                video.onloadedmetadata=function(){
-                    video.play();
-                    text.value = "扫描中,请稍等...";
-                    var t = setInterval(function() {
-                        var w=video.videoWidth,h=video.videoHeight;
-                        canvas.width = w;
-                        canvas.height = h;
-                        var ctx = canvas.getContext("2d");
-                        ctx.drawImage(video, 0, 0, w, h);
-                        var base64 = canvas.toDataURL();
-                        qrcode.decode(base64);
-                        qrcode.callback = function(data) {
-                            console.log(data)
-                            if (!(data == "error decoding QR Code")) {
-                                text.value = data;
-                                video.pause();
-                                clearInterval(t);
-
-                            }
-                        };
-                    }, 200);
-                }
-            });
-            p.catch(function(err) {
-                console.log(err);
-            });
-        } else if (navigator.getUserMedia) {
-            navigator.getUserMedia({
-                    audio: false,
+        document.getElementById(scanBtn).onclick=function(){
+            clearInterval(t);
+            if(blob)
+                window.URL.revokeObjectURL(blob);
+            video.style.display = "block";
+            navigator.getUserMedia = navigator.getUserMedia ||
+                navigator.webkitGetUserMedia ||
+                navigator.mozGetUserMedia;
+            window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
+            if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|SymbianOS)/i)) {
+                var front = false;
+            } else {
+                var front = true;
+            }
+            if (navigator.mediaDevices.getUserMedia) {
+                var p = navigator.mediaDevices.getUserMedia({
                     video: {
-                        width: 900,
-                        height: 600
-                    }
-                },
-                function(stream) {
-                    video.src = window.URL.createObjectURL(stream) || stream;
+                        facingMode: (front ? "user" : "environment"),
+                        width: {
+                            ideal: 900,
+                            min:300,
+                            max:1200
+                        },
+                        height: {
+                            ideal: 600,
+                            min:200,
+                            max:800
+                        }
+                    },
+                    audio: false
+                });
+                p.then(function(stream) {
+                    blob=window.URL.createObjectURL(stream)
+                    video.src = blob || stream;
                     video.onloadedmetadata=function(){
                         video.play();
                         text.value = "扫描中,请稍等...";
-                        var t = setInterval(function() {
+                        t = setInterval(function() {
                             var w=video.videoWidth,h=video.videoHeight;
                             canvas.width = w;
                             canvas.height = h;
@@ -245,22 +214,60 @@
                             var base64 = canvas.toDataURL();
                             qrcode.decode(base64);
                             qrcode.callback = function(data) {
+                                console.log(data)
                                 if (!(data == "error decoding QR Code")) {
                                     text.value = data;
                                     video.pause();
                                     clearInterval(t);
-
+                                    stream.stop();
                                 }
                             };
-                        }, 200);
+                        }, 500);
                     }
-                },
-                function(err) {
-                    console.log(err);
-                }
-            );
-        } else {
-            alert("不支持摄像头功能！");
+                });
+                p.catch(function(err) {
+                     alert("摄像头异常！")
+                });
+            } else if (navigator.getUserMedia) {
+                navigator.getUserMedia({
+                        audio: false,
+                        video: {
+                            width: 900,
+                            height: 600
+                        }
+                    },
+                    function(stream) {
+                        blob=window.URL.createObjectURL(stream)
+                        video.src = blob || stream;
+                        video.onloadedmetadata=function(){
+                            video.play();
+                            text.value = "扫描中,请稍等...";
+                            t = setInterval(function() {
+                                var w=video.videoWidth,h=video.videoHeight;
+                                canvas.width = w;
+                                canvas.height = h;
+                                var ctx = canvas.getContext("2d");
+                                ctx.drawImage(video, 0, 0, w, h);
+                                var base64 = canvas.toDataURL();
+                                qrcode.decode(base64);
+                                qrcode.callback = function(data) {
+                                    if (!(data == "error decoding QR Code")) {
+                                        text.value = data;
+                                        video.pause();
+                                        clearInterval(t);
+                                        stream.stop();
+                                    }
+                                };
+                            }, 500);
+                        }
+                    },
+                    function(err) {
+                        alert("摄像头异常！")
+                    }
+                );
+            } else {
+                alert("不支持摄像头功能！");
+            }
         }
     }
     </script>
