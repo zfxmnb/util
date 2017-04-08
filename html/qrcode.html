@@ -197,8 +197,9 @@
                     video.play();
                     text.value = "扫描中,请稍等...";
                     var t = setInterval(function() {
-                        canvas.width = video.videoWidth;
-                        canvas.height = video.videoHeight;
+                        var w=video.videoWidth,h=video.videoHeight;
+                        canvas.width = w;
+                        canvas.height = h;
                         var ctx = canvas.getContext("2d");
                         ctx.drawImage(video, 0, 0, w, h);
                         var base64 = canvas.toDataURL();
@@ -232,8 +233,9 @@
                         video.play();
                         text.value = "扫描中,请稍等...";
                         var t = setInterval(function() {
-                            canvas.width = video.videoWidth;
-                            canvas.height = video.videoHeight;
+                            var w=video.videoWidth,h=video.videoHeight;
+                            canvas.width = w;
+                            canvas.height = h;
                             var ctx = canvas.getContext("2d");
                             ctx.drawImage(video, 0, 0, w, h);
                             var base64 = canvas.toDataURL();
