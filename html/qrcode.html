@@ -142,30 +142,32 @@
         return out;
     }
     function discernQR(showcon, fileBtn,imgCon) {
-        if(FileReader){
-            var file = new FileReader();
+        
             var fileImg = document.getElementById(fileBtn),
                 text = document.getElementById(showcon),
                 imgCon=document.getElementById(imgCon);
             fileImg.onchange = function() {
-                var img = this.files[0],
-                    filter = /^image\/.*/;
-                if (!filter.test(img.type)) {
-                    alert("文件格式不正确");
-                    return false;
-                }
-                file.readAsDataURL(img);
-                file.onload = function() {
-                    imgCon.src=this.result;
-                    qrcode.decode(this.result);
-                    qrcode.callback = function(data) {
-                        text.value = data;
-                    };
+                if(FileReader){
+                    var file = new FileReader();
+                    var img = this.files[0],
+                        filter = /^image\/.*/;
+                    if (!filter.test(img.type)) {
+                        alert("文件格式不正确");
+                        return false;
+                    }
+                    file.readAsDataURL(img);
+                    file.onload = function() {
+                        imgCon.src=this.result;
+                        qrcode.decode(this.result);
+                        qrcode.callback = function(data) {
+                            text.value = data;
+                        };
+                    }
+                }else{
+                    alert("不支持上传识别二维码！")
                 }
             }
-        }else{
-            alert("不支持上传识别二维码！")
-        }
+        
     }
     function scanQR(showcon,scanBtn,videoEle,canvasEle) {
         var t,blob;
