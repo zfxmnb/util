@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> template.js</title>
+</head>
+<body>
+    <div id="ele"></div>
+    <textarea id="temp" style="display:none;">
+        <h1><%=data.name%></h1>
+        <% for(var i in  data.arr){ %>
+            <div><%= data.arr[i]%></div>
+        <% } %>
+         <% for(var i in  data){ %>
+            <% if(typeof data[i]=='object'){%>
+                <% for(var j in  data[i]){ %>
+                    <div><%= data[i][j]%></div>
+                <% } %>
+            <%}%>
+        <% } %>
+        <h2><%= data.name+123*3 %></h2>
+    </textarea>
+    <script src="template.js"></script>
+    <script>
+    var data = {
+        name: "zfxmnb",
+        arr:["zfx","cxm","zh"]
+    }
+    var html=template( data,"temp", "ele");
+    console.log(html);
+    </script>
+</body>
+
+</html>

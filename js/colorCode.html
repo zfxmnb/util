@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>颜色代码转换</title>
+    <style>
+        .con{
+            width:1000px;
+            margin:10px auto;
+            text-align: center;
+        }
+        input{
+            width:160px;
+            height:32px;
+            line-height: 32px;
+            border:1px solid #ccc;
+            border-radius:6px;
+            font-size:18px;
+            text-align: center
+        }
+        input:focus{
+            border-color:#3385ff;
+        }
+        button{
+            height:34px;
+            border:none;
+            color:#fff;
+            background:#3385ff;
+            font-size:22px;
+            border-radius:6px;
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="con">
+        <h3>颜色代码转换</h3>
+        <p>
+        <input type="text" id="hex" onclick="this.select()" placeholder="十六进制">
+        <button id="change">转换</button>
+        <input type="text" id="rgb" onclick="this.select()" placeholder="RGB">
+        </p>
+    </div>
+    <script>
+    var original="rgb",hexType=new RegExp("^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$");
+    var hex=document.getElementById('hex'),rgb=document.getElementById('rgb'),change=document.getElementById('change');
+    hex.onfocus=function(){
+        original="hex"; 
+    }
+    rgb.onfocus=function(){
+        original="rgb";
+    }
+    rgb.onblur=function(){
+        var arr=rgb.value.split(",");
+        if(arr.length==3){
+            for(var i=0;i<3;i++){
+                if(isNaN(parseInt(arr[i])))
+                    return
+            }
+            rgb.value="rgb("+rgb.value+")";
+        }
+    }
+    rgb.onchange=function(){
+        hex.value="";
+    }
+    hex.onchange=function(){
+        rgb.value="";
+    }
+    change.onclick=function(){
+        if(original=="hex"){
+            if(hexType.test(hex.value)){
+                var hexVal=hex.value.toUpperCase();
+                var num=hexFn(hexVal);
+                var string="rgb("+num[0]+","+num[1]+","+num[2]+")";
+                rgb.value=string;
+            }else{
+
+            }
+        }else if(original=="rgb"){
+            var rgbVal=rgb.value.toUpperCase();
+            if(rgbVal.indexOf("RGB(")!=0)
+                return
+            var rgbSplit=rgbVal.split("RGB(")[1].split(")");
+            if(rgbSplit.length!=2)
+                return
+            var rgbArr=rgbSplit[0].split(",");
+            if(rgbSplit[1]==""&&rgbArr.length==3){
+                var string="#";
+                for(var i=0;i<3;i++){
+                    if(!isNaN(parseInt(rgbArr[i]))&&parseInt(rgbArr[i])<256){
+                        string+=parseInt(rgbArr[i]).toString(16)<10?"0"+parseInt(rgbArr[i]).toString(16):parseInt(rgbArr[i]).toString(16);
+                    }else{
+                        return
+                    }
+                }
+                hex.value=string.toUpperCase();
+            }
+        }
+    }
+    function hexFn(hexVal){
+        var num=[];
+        if(hexVal.length==4){
+            for(var i=1;i<4;i++){
+                    if(!isNaN(parseInt(hexVal.charAt(i)))){
+                            var n=parseInt(hexVal.charAt(i))
+                    }else{
+                            var n=hexVal.charAt(i).charCodeAt()-55;
+                    }
+                    num.push(n*16+n);
+            }       
+        }else{
+             for(var i=1;i<6;i+=2){
+                    if(!isNaN(parseInt(hexVal.charAt(i)))){
+                            var n1=parseInt(hexVal.charAt(i))
+                    }else{
+                            var n1=hexVal.charAt(1).charCodeAt()-55;
+                    }
+                    if(!isNaN(parseInt(hexVal.charAt(i+1)))){
+                            var n2=parseInt(hexVal.charAt(i+1))
+                    }else{
+                            var n2=hexVal.charAt(i+1).charCodeAt()-55;
+                    }
+                    num.push(n1*16+n2);
+            }   
+        }
+        return num;  
+    }
+    </script>
+</body>
+</html>
