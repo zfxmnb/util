@@ -4,10 +4,10 @@ function templateOld(data, t, e) {
         while (i < a.length) {
             if (i % 2 === 0) {
                 if(/\S/.test(a[i]))
-                    s += "outStr+='" + a[i].replace(/[\r\n]/g, "") + "';";
+                    s += ";outStr+='" + a[i].replace(/[\r\n]/g, "") + "';";
             } else {
                 if (a[i].indexOf("=") == 0)
-                    s += "outStr+=" + a[i].substr(1) + ";";
+                    s += ";outStr+=" + a[i].substr(1) + ";";
                 else
                     s += a[i];
             }
