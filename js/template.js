@@ -38,3 +38,23 @@ function template(data, t, e) {
             ele.innerHTML = outStr;
         return outStr;
     }
+function template2(data, t, e) {
+        var tpl = document.getElementById(t),
+            ele = document.getElementById(e),
+            outStr,t=tpl.value,
+            s ="outStr='"+t.replace(/[\r\n]/g, "").replace(/<%([^<%]*)%>/g,function(m,p){
+                if(p.indexOf("=")==0)
+                    return "';outStr+="+p.slice(1)+";outStr+='";
+                else
+                    return "';"+p+";outStr+='";
+            })+"'";
+        try{
+            eval(s)
+        }catch(e){
+            console.error(e);
+            outStr="{template error}";
+        }
+        if (ele)
+            ele.innerHTML = outStr;
+        return outStr;
+    }
