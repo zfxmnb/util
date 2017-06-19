@@ -81,11 +81,11 @@
         canvas = document.getElementById('canvas'),
         cancel = document.getElementById('cancel'),
         confirm = document.getElementById('confirm');
-    navigator.getUserMedia = navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia;
-    window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
     window.onload = function() {
+         navigator.getUserMedia = navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia;
+        window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({
                 video: {
