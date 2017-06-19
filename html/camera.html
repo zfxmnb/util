@@ -140,6 +140,7 @@
             h = video.videoHeight;
         var handle = function() {
             video.pause();
+            confirm.removeEventListener("touchstart", handle);
             var date = new Date(),
                 y = date.getFullYear(),
                 m = date.getMonth(),
@@ -149,18 +150,21 @@
             canvas.width = w;
             canvas.height = h;
             var ctx = canvas.getContext("2d");
-            //旋转翻转
-            ctx.translate(w / 2, h / 2);
-            ctx.rotate((Math.PI / 180) * 180);
-            ctx.scale(-1, 1);
-            ctx.translate(-w / 2, -h / 2);
+            //火狐旋转翻转
+            if(navigator.userAgent.indexOf()>-1){
+                ctx.translate(w / 2, h / 2);
+                //ctx.rotate((Math.PI / 180) * 180);
+                ctx.scale(1, -1);
+                ctx.translate(-w / 2, -h / 2);
+            }
             ctx.drawImage(video, 0, 0, w, h);
-
             var base64 = canvas.toDataURL();
-            //confirm.download = "pictrue_" + y + m + d + ".jpeg";
-            //confirm.href = base64;
-            window.top.postMessage(base64,"*");
-            confirm.removeEventListener("touchstart", handle);
+            if(window.self!=window.top){
+                window.top.postMessage(base64,"*");
+            }else{
+                confirm.download = "pictrue_" + y + m + d + ".jpeg";
+                confirm.href = base64;
+            }
         }
         confirm.addEventListener("touchstart", handle);
     }
