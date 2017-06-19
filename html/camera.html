@@ -110,6 +110,7 @@
                 blob = window.URL.createObjectURL(stream)
                 video.src = blob || stream;
                 video.onloadedmetadata = function() {
+                    alert("ok")
                     imgDispose();
                 }
             }).catch(function(err) {
