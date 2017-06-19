@@ -60,7 +60,7 @@
         text-decoration: none;
         outline: none;
         -moz-outline: none;
-        -webkit-tap-highlight-color:transparent;
+        -webkit-tap-highlight-color: transparent;
     }
     </style>
 </head>
@@ -72,7 +72,7 @@
             <canvas id="canvas"></canvas>
         </div>
         <footer>
-            <div><a href="" id="cancel">×</a></div>
+            <div><a href="javascript:void(0);" id="cancel">×</a></div>
             <div><a href="javascript:void(0);" id="confirm">√</a></div>
         </footer>
     </div>
@@ -81,6 +81,9 @@
         canvas = document.getElementById('canvas'),
         cancel = document.getElementById('cancel'),
         confirm = document.getElementById('confirm');
+    cancel.onclick = function() {
+        window.location.reload();
+    };
     navigator.getUserMedia = navigator.getUserMedia ||
         navigator.webkitGetUserMedia ||
         navigator.mozGetUserMedia;
@@ -90,24 +93,14 @@
         navigator.mediaDevices.getUserMedia({
             video: {
                 facingMode: "environment",
-                // width: {
-                //     min: 480,
-                //     ideal: 1080,
-                //     max: 1920
-                // },
-                // height: {
-                //     min: 640,
-                //     ideal: 1440,
-                //     max: 2560
-                // }
                 width: {
-                    ideal: 720,
-                    min: 300,
+                    ideal: 1080,
+                    min: 480,
                     max: 1080
                 },
                 height: {
-                    ideal: 1280,
-                    min: 200,
+                    ideal: 1440,
+                    min: 640,
                     max: 1440
                 }
             },
@@ -169,9 +162,9 @@
             var base64 = canvas.toDataURL();
             confirm.download = "pictrue_" + y + m + d + ".jpeg";
             confirm.href = toBlob(base64);
-            confirm.removeEventListener("click", handle);
+            confirm.removeEventListener("touchstart", handle);
         }
-        confirm.addEventListener("click", handle);
+        confirm.addEventListener("touchstart", handle);
     }
 
     function toBlob(base64) {
