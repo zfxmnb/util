@@ -24,7 +24,7 @@
     video {
         display: block;
         max-width: 100%;
-        margin:0 auto;
+        margin: 0 auto;
     }
     
     canvas {
@@ -85,55 +85,57 @@
         navigator.webkitGetUserMedia ||
         navigator.mozGetUserMedia;
     window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({
-            video: {
-                facingMode: "environment",
-                width: {
-                    min: 480,
-                    ideal: 1080,
-                    max: 3000
-                },
-                height: {
-                    min: 640,
-                    ideal: 1440,
-                    max: 4000
-                }
-            },
-            audio: false
-        }).then(function(stream) {
-            blob = window.URL.createObjectURL(stream)
-            video.src = blob || stream;
-            video.onloadedmetadata = function() {
-                imgDispose();
-            }
-        }).catch(function(err) {
-            alert("摄像头异常！")
-        });
-    } else if (navigator.getUserMedia) {
-        navigator.getUserMedia({
-                audio: false,
+    window.onload = function() {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({
                 video: {
-                    width: 1080,
-                    height: 1440
-                }
-            },
-            function(stream) {
+                    facingMode: "environment",
+                    width: {
+                        min: 480,
+                        ideal: 1080,
+                        max: 3000
+                    },
+                    height: {
+                        min: 640,
+                        ideal: 1440,
+                        max: 4000
+                    }
+                },
+                audio: false
+            }).then(function(stream) {
                 blob = window.URL.createObjectURL(stream)
                 video.src = blob || stream;
                 video.onloadedmetadata = function() {
                     imgDispose();
                 }
-            },
-            function(err) {
+            }).catch(function(err) {
                 alert("摄像头异常！")
-            }
-        );
-    } else {
-        alert("不支持摄像头功能！");
+            });
+        } else if (navigator.getUserMedia) {
+            navigator.getUserMedia({
+                    audio: false,
+                    video: {
+                        width: 1080,
+                        height: 1440
+                    }
+                },
+                function(stream) {
+                    blob = window.URL.createObjectURL(stream)
+                    video.src = blob || stream;
+                    video.onloadedmetadata = function() {
+                        imgDispose();
+                    }
+                },
+                function(err) {
+                    alert("摄像头异常！")
+                }
+            );
+        } else {
+            alert("不支持摄像头功能！");
+        }
     }
 
-    function imgDispose(){
+    function imgDispose() {
         video.play();
         var w = video.videoWidth,
             h = video.videoHeight;
