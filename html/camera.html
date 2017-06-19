@@ -27,7 +27,7 @@
     }
     
     canvas {
-        display: none;
+        
     }
     
     footer {
@@ -161,7 +161,7 @@
 
             var base64 = canvas.toDataURL();
             confirm.download = "pictrue_" + y + m + d + ".jpeg";
-            confirm.href = toBlob(base64);
+            confirm.href = base64;
             confirm.removeEventListener("touchstart", handle);
         }
         confirm.addEventListener("touchstart", handle);
