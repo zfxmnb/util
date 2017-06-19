@@ -110,8 +110,7 @@
                 blob = window.URL.createObjectURL(stream)
                 video.src = blob || stream;
                 video.onloadedmetadata = function() {
-                    alert("ok")
-                    imgDispose();
+                    //imgDispose();
                 }
             }).catch(function(err) {
                 alert("摄像头异常！")
@@ -146,6 +145,7 @@
             h = video.videoHeight;
         var handle = function() {
             video.pause();
+            alert("pause");
             var date = new Date(),
                 y = date.getFullYear(),
                 m = date.getMonth(),
