@@ -147,7 +147,7 @@
             canvas.height = h;
             var ctx = canvas.getContext("2d");
             //旋转翻转
-            if(/(Firefox|UCBrowser)/.test(navigator.userAgent)){
+            if(/(Firefox)/.test(navigator.userAgent)){
                 ctx.translate(w / 2, h / 2);
                 //ctx.rotate((Math.PI / 180) * 180);
                 ctx.scale(1, -1);
