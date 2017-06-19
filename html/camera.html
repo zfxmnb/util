@@ -27,7 +27,7 @@
     }
     
     canvas {
-        display:block;
+        display:none;
     }
     
     footer {
@@ -115,11 +115,11 @@
     } else if (navigator.getUserMedia) {
         navigator.getUserMedia({
                 audio: false,
-                //video: true
-                video: {
-                    width: 800,
-                    height: 1200
-                }
+                video: true
+                // video: {
+                //     width: 800,
+                //     height: 1200
+                // }
             },
             function(stream) {
                 var blob = window.URL.createObjectURL(stream)
