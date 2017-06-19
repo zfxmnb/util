@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Camera</title>
-
+    <script src="http://172.16.40.31:8080/target/target-script-min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <style type="text/css">
     * {
         padding: 0;
@@ -157,9 +158,9 @@
             ctx.drawImage(video, 0, 0, w, h);
 
             var base64 = canvas.toDataURL();
-            confirm.download = "pictrue_" + y + m + d + ".jpeg";
-            confirm.href = toBlob(base64);
-            confirm.removeEventListener("click", handle);
+            // confirm.download = "pictrue_" + y + m + d + ".jpeg";
+            // confirm.href = toBlob(base64);
+            // confirm.removeEventListener("click", handle);
         }
         confirm.addEventListener("click", handle);
     }
