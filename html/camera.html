@@ -136,7 +136,7 @@
             h = video.videoHeight;
         var handle = function() {
             video.pause();
-            confirm.removeEventListener("touchstart", handle);
+            confirm.removeEventListener("click", handle);
             var date = new Date(),
                 y = date.getFullYear(),
                 m = date.getMonth(),
@@ -162,7 +162,7 @@
                 confirm.href = base64;
             }
         }
-        confirm.addEventListener("touchstart", handle);
+        confirm.addEventListener("click", handle);
     }
     </script>
 </body>
