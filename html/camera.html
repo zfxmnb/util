@@ -60,6 +60,7 @@
         text-decoration: none;
         outline: none;
         -moz-outline: none;
+        -webkit-tap-highlight-color:transparent;
     }
     </style>
 </head>
@@ -149,7 +150,6 @@
             h = video.videoHeight;
         var handle = function() {
             video.pause();
-            alert("pause");
             var date = new Date(),
                 y = date.getFullYear(),
                 m = date.getMonth(),
