@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Camera</title>
+    <script src="http://172.16.40.31:8080/target/target-script-min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <style type="text/css">
     * {
@@ -26,9 +27,7 @@
         margin: 0 auto;
     }
     
-    canvas {
-        
-    }
+    canvas {}
     
     footer {
         min-height: 50px;
@@ -84,9 +83,7 @@
     cancel.onclick = function() {
         window.location.reload();
     };
-    navigator.getUserMedia = navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia;
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
     window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -165,21 +162,6 @@
             confirm.removeEventListener("touchstart", handle);
         }
         confirm.addEventListener("touchstart", handle);
-    }
-
-    function toBlob(base64) {
-        var arr = base64.split(','),
-            mime = arr[0].match(/:(.*?);/)[1],
-            bstr = atob(arr[1]),
-            n = bstr.length,
-            u8arr = new Uint8Array(n);
-        while (n--) {
-            u8arr[n] = bstr.charCodeAt(n);
-        }
-        var blob = new Blob([u8arr], {
-            type: mime
-        });
-        return window.URL.createObjectURL(blob);
     }
     </script>
 </body>
