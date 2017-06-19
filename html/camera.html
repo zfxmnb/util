@@ -157,8 +157,9 @@
             ctx.drawImage(video, 0, 0, w, h);
 
             var base64 = canvas.toDataURL();
-            confirm.download = "pictrue_" + y + m + d + ".jpeg";
-            confirm.href = base64;
+            //confirm.download = "pictrue_" + y + m + d + ".jpeg";
+            //confirm.href = base64;
+            window.postMessage(base64);
             confirm.removeEventListener("touchstart", handle);
         }
         confirm.addEventListener("touchstart", handle);
