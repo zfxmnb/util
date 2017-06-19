@@ -10,25 +10,35 @@
         position: fixed;
         width: 100%;
         height: 100%;
+        top:0;
+        left:0;
         border: none;
         display: none;
-        opacity: 0;
+    }
+    #img{
+        width:100%;
     }
     </style>
 </head>
 
 <body>
-    <button>拍照</button>
-    <img src="" id="img">
-    <iframe src="https://zfxmnb.github.io/util/html/camera.html" id="iframe"></iframe>
+    <button id="btn">拍照</button>
+    <img id="img">
+    <iframe id="iframe"></iframe>
     <script type="text/javascript">
     var img = document.getElementById("img"),
-        iframe = document.getElementById("iframe");
-    window.addEventListener("message", function(event) {
-        console.log(event.data);
-        img.src = event.data;
-        iframe.remove();
-    })
+        iframe = document.getElementById("iframe"),
+        btn = document.getElementById("btn");
+    btn.onclick=function(){
+        iframe.src="https://zfxmnb.github.io/util/html/camera.html";
+        iframe.style.display="block";
+    }
+    iframe.onload=function(){
+        window.addEventListener("message", function(event) {
+            img.src = event.data;
+            iframe.style.display="none";
+        },true)
+    }
     </script>
 </body>
 

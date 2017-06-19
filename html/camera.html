@@ -93,11 +93,11 @@
                 facingMode: "environment",
                 width: {
                     min: 480,
-                    ideal: 720,
+                    ideal: 960,
                 },
                 height: {
                     min: 640,
-                    ideal: 960,
+                    ideal: 1280,
                 }
             },
             audio: false
@@ -114,10 +114,6 @@
         navigator.getUserMedia({
                 audio: false,
                 video: true
-                // video: {
-                //     width: 800,
-                //     height: 1200
-                // }
             },
             function(stream) {
                 var blob = window.URL.createObjectURL(stream)
@@ -150,13 +146,13 @@
             canvas.width = w;
             canvas.height = h;
             var ctx = canvas.getContext("2d");
-            //火狐旋转翻转
-            if(/(Firefox|)/.test(navigator.userAgent)){
-                ctx.translate(w / 2, h / 2);
-                //ctx.rotate((Math.PI / 180) * 180);
-                ctx.scale(1, -1);
-                ctx.translate(-w / 2, -h / 2);
-            }
+            //旋转翻转
+            //if(/(Firefox|)/.test(navigator.userAgent)){
+            ctx.translate(w / 2, h / 2);
+            //ctx.rotate((Math.PI / 180) * 180);
+            ctx.scale(1, -1);
+            ctx.translate(-w / 2, -h / 2);
+            //}
             ctx.drawImage(video, 0, 0, w, h);
             var base64 = canvas.toDataURL();
             if(window.self!=window.top){
