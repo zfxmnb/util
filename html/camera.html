@@ -93,11 +93,11 @@
                 facingMode: "environment",
                 width: {
                     ideal: 900,
-                    min: 360,
+                    min: 480,
                 },
                 height: {
                     ideal: 1200,
-                    min: 480,
+                    min: 640,
                 }
             },
             audio: false
@@ -151,7 +151,7 @@
             canvas.height = h;
             var ctx = canvas.getContext("2d");
             //火狐旋转翻转
-            if(navigator.userAgent.indexOf()>-1){
+            if(navigator.userAgent.indexOf("Firefox")>-1){
                 ctx.translate(w / 2, h / 2);
                 //ctx.rotate((Math.PI / 180) * 180);
                 ctx.scale(1, -1);
