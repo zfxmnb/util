@@ -80,63 +80,57 @@
         canvas = document.getElementById('canvas'),
         cancel = document.getElementById('cancel'),
         confirm = document.getElementById('confirm');
-    window.onload = function() {
-         navigator.getUserMedia = navigator.getUserMedia ||
-            navigator.webkitGetUserMedia ||
-            navigator.mozGetUserMedia;
-        window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
-        if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|SymbianOS)/i)) {
-            var front = false;
-        } else {
-            var front = true;
-        }
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({
-                video: {
-                    facingMode: front ? "user" : "environment",
-                    width: {
-                        min: 480,
-                        ideal: 1080,
-                        max: 1920
-                    },
-                    height: {
-                        min: 640,
-                        ideal: 1440,
-                        max: 2560
-                    }
+    navigator.getUserMedia = navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia;
+    //window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
+
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({
+            video: {
+                facingMode: "environment",
+                width: {
+                    min: 480,
+                    ideal: 1080,
+                    max: 1920
                 },
-                audio: false
-            }).then(function(stream) {
+                height: {
+                    min: 640,
+                    ideal: 1440,
+                    max: 2560
+                }
+            },
+            audio: false
+        }).then(function(stream) {
+            blob = window.URL.createObjectURL(stream)
+            video.src = blob || stream;
+            video.onloadedmetadata = function() {
+                imgDispose();
+            }
+        }).catch(function(err) {
+            alert("摄像头异常！")
+        });
+    } else if (navigator.getUserMedia) {
+        navigator.getUserMedia({
+                audio: false,
+                video: {
+                    width: 1080,
+                    height: 1440
+                }
+            },
+            function(stream) {
                 blob = window.URL.createObjectURL(stream)
                 video.src = blob || stream;
                 video.onloadedmetadata = function() {
-                    //imgDispose();
+                    imgDispose();
                 }
-            }).catch(function(err) {
+            },
+            function(err) {
                 alert("摄像头异常！")
-            });
-        } else if (navigator.getUserMedia) {
-            navigator.getUserMedia({
-                    audio: false,
-                    video: {
-                        width: 1080,
-                        height: 1440
-                    }
-                },
-                function(stream) {
-                    blob = window.URL.createObjectURL(stream)
-                    video.src = blob || stream;
-                    video.onloadedmetadata = function() {
-                        imgDispose();
-                    }
-                },
-                function(err) {
-                    alert("摄像头异常！")
-                }
-            );
-        } else {
-            alert("不支持摄像头功能！");
-        }
+            }
+        );
+    } else {
+        alert("不支持摄像头功能！");
     }
 
     function imgDispose() {
@@ -163,9 +157,9 @@
             ctx.drawImage(video, 0, 0, w, h);
 
             var base64 = canvas.toDataURL();
-            // confirm.download = "pictrue_" + y + m + d + ".jpeg";
-            // confirm.href = toBlob(base64);
-            // confirm.removeEventListener("click", handle);
+            confirm.download = "pictrue_" + y + m + d + ".jpeg";
+            confirm.href = toBlob(base64);
+            confirm.removeEventListener("click", handle);
         }
         confirm.addEventListener("click", handle);
     }
