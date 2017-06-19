@@ -106,7 +106,7 @@
             },
             audio: false
         }).then(function(stream) {
-            blob = window.URL.createObjectURL(stream)
+            var blob = window.URL.createObjectURL(stream)
             video.src = blob || stream;
             video.onloadedmetadata = function() {
                 imgDispose();
@@ -118,12 +118,12 @@
         navigator.getUserMedia({
                 audio: false,
                 video: {
-                    width: 1080,
-                    height: 1440
+                    width: 800,
+                    height: 1200
                 }
             },
             function(stream) {
-                blob = window.URL.createObjectURL(stream)
+                var blob = window.URL.createObjectURL(stream)
                 video.src = blob || stream;
                 video.onloadedmetadata = function() {
                     imgDispose();
