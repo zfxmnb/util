@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="file" accept="image/png,image/gif,image/jpeg,image/webp" id="upload">
+    <br>
+    <img src="" id="showImg">
+    <script type="text/javascript">
+    function upfiles(conf, callback) {
+        var form = document.createElement("form");
+        var id ="id"+generateMixed(3);i=0;
+            form.action = conf.url || "";
+        form.method = "post";
+        form.target = id;
+        form.enctype = conf.enctype || "multipart/form-data";
+        form.style.display = "none";
+        document.body.appendChild(form);
+        form.appendChild(document.getElementById(conf.files));
+
+        var iframe = document.createElement("iframe");
+        iframe.style.display = "none";
+        iframe.name = id;
+        iframe.id = id;
+        document.body.appendChild(iframe);
+        form.submit();
+
+        var t = setInterval(getRes, 500)
+
+        function getRes() {
+            i++;
+            if(i>5)
+                clearInterval(t);
+            try{
+                if (iframe.contentWindow) { //动态iframe所在窗口对象是否存在
+                    responseText = iframe.contentWindow.document.body ? iframe.contentWindow.document.body.innerHTML : null;
+                } else if (iframe.contentDocument) { //动态iframe的文档对象是否存在
+                    responseText = iframe.contentDocument.document.body ? iframe.contentDocument.document.body.innerHTML : null;
+                }
+                if (responseText!==null) {
+                    clearInterval(t);
+                    callback.call(conf,responseText);
+                    form.remove();
+                    iframe.remove();
+                }
+            }catch(err){
+                console.log(err)
+            }
+        }
+
+        function generateMixed(n, cap) {
+            var chars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+            var res = "";
+            for (var i = 0; i < n; i++) {
+                var id = Math.ceil(Math.random() * 35);
+                if (id > 9 && Math.random() >= .5 && cap)
+                    res += chars[id].toLowerCase();
+                else
+                    res += chars[id]
+            }
+            return res;
+        }
+    }
+    document.getElementById('upload').onchange=function(){
+        upfiles({
+            url:"/action",
+            files:"upload"
+        }, function(data) {
+            console.log(this)
+            console.log(data)
+        })
+    }
+    </script>
+</body>
+
+</html>
