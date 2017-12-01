@@ -6,128 +6,128 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>Sprite 拼接</title>
     <style type="text/css">
-    * {
-        padding: 0;
-        margin: 0;
-    }
-
-    a {
-        text-decoration: none;
-    }
-
-    input {
-        border: 1px solid #dcdcdc;
-        border-radius: 3px;
-        padding: 5px;
-    }
-
-    #multipleUpload,
-    #addUpload,
-    #draw {
-        display: none;
-    }
-
-    .upload_btn {
-        display: inline-block;
-        padding: 5px 10px;
-        font-size: 18px;
-        font-weight: 600;
-        color: #fff;
-        background: #3385ff;
-        border-radius: 4px;
-        margin: 2px 5px;
-    }
-
-    .config,
-    .input,
-    .options,
-    .img_list {
-        max-width: 800px;
-        padding: 20px;
-        margin: 10px auto;
-        border: 1px solid #dcdcdc;
-        border-radius: 10px;
-        list-style-type: none;
-        overflow: hidden;
-    }
-
-    .img_list li {
-        width: 100px;
-        height: 80px;
-        margin-right: 15px;
-        line-height: 80px;
-        float: left;
-        border: 1px solid #ececec;
-        position: relative;
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        cursor: move;
-    }
-
-    .img_list li:hover {
-        border: 1px solid #3385ff;
-    }
-
-    .img_list li .remove {
-        display: block;
-        position: absolute;
-        height: 20px;
-        width: 20px;
-        right: -8px;
-        top: -8px;
-        background: #bbb;
-        border-radius: 50%;
-        z-index: 99;
-        line-height: 20px;
-        text-align: center;
-        color: #fff;
-        vertical-align: middle;
-        cursor: pointer;
-    }
-
-    .img_list img {
-        max-width: 100%;
-        max-height: 100%;
-        text-align: center;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        -webkit-transform: translate(-50%, -50%);
-    }
-
-    .config label {
-        display: block;
-        padding: 5px;
-    }
-
-    .config label span {
-        display: inline-block;
-        width: 100px;
-    }
-
-    .options a {
-        color: ;
-    }
-
-    .options textarea {
-        width: 100%;
-        margin: 10px 0;
-    }
-
-    .options img {
-        max-width: 100%;
-    }
-
-    #tip {
-        color: red;
-        padding-left: 10px;
-        display: none;
-    }
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        
+        a {
+            text-decoration: none;
+        }
+        
+        input {
+            border: 1px solid #dcdcdc;
+            border-radius: 3px;
+            padding: 5px;
+        }
+        
+        #multipleUpload,
+        #addUpload,
+        #draw {
+            display: none;
+        }
+        
+        .upload_btn {
+            display: inline-block;
+            padding: 5px 10px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            background: #3385ff;
+            border-radius: 4px;
+            margin: 2px 5px;
+        }
+        
+        .config,
+        .input,
+        .options,
+        .img_list {
+            max-width: 800px;
+            padding: 20px;
+            margin: 10px auto;
+            border: 1px solid #dcdcdc;
+            border-radius: 10px;
+            list-style-type: none;
+            overflow: hidden;
+        }
+        
+        .img_list li {
+            width: 100px;
+            height: 80px;
+            margin-right: 15px;
+            line-height: 80px;
+            float: left;
+            border: 1px solid #ececec;
+            position: relative;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            cursor: move;
+        }
+        
+        .img_list li:hover {
+            border: 1px solid #3385ff;
+        }
+        
+        .img_list li .remove {
+            display: block;
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            right: -8px;
+            top: -8px;
+            background: #bbb;
+            border-radius: 50%;
+            z-index: 99;
+            line-height: 20px;
+            text-align: center;
+            color: #fff;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+        
+        .img_list img {
+            max-width: 100%;
+            max-height: 100%;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -webkit-transform: translate(-50%, -50%);
+        }
+        
+        .config label {
+            display: block;
+            padding: 5px;
+        }
+        
+        .config label span {
+            display: inline-block;
+            width: 100px;
+        }
+        
+        .options a {
+            color: ;
+        }
+        
+        .options textarea {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .options img {
+            max-width: 100%;
+        }
+        
+        #tip {
+            color: red;
+            padding-left: 10px;
+            display: none;
+        }
     </style>
 </head>
 
@@ -164,180 +164,186 @@
         <img id="preview">
     </div>
     <script type="text/javascript">
-    var imgs = [],
-        maxW = 0,
-        maxH = 0;
+        var imgs = [],
+            maxW = 0,
+            maxH = 0;
 
-    var multipleUpload = document.getElementById("multipleUpload"),
-        addUpload = document.getElementById("addUpload"),
-        colsEle = document.getElementById('cols'),
-        draw = document.getElementById("draw"),
-        ctx = draw.getContext("2d"),
-        downloadBtn = document.getElementById("download"),
-        preview = document.getElementById("preview"),
-        base64Text = document.getElementById("base64Text"),
-        imgName = document.getElementById("name"),
-        imgWidth = document.getElementById("width"),
-        imgHeight = document.getElementById("height"),
-        tip = document.getElementById("tip"),
-        imgList = document.getElementById("imgList");
+        var multipleUpload = document.getElementById("multipleUpload"),
+            addUpload = document.getElementById("addUpload"),
+            colsEle = document.getElementById('cols'),
+            draw = document.getElementById("draw"),
+            ctx = draw.getContext("2d"),
+            downloadBtn = document.getElementById("download"),
+            preview = document.getElementById("preview"),
+            base64Text = document.getElementById("base64Text"),
+            imgName = document.getElementById("name"),
+            imgWidth = document.getElementById("width"),
+            imgHeight = document.getElementById("height"),
+            tip = document.getElementById("tip"),
+            imgList = document.getElementById("imgList");
 
-    multipleUpload.onchange = function() {
-        //文件转换为base64
-        var files = this.files,
-            accomplish = 0,
-            imgArr = new Array(files.length);
-        for (var i = 0; i < files.length; i++) {
-            (function(index) {
-                var render = new FileReader();
-                render.readAsDataURL(files[index]);
-                render.onload = function() {
-                    imgArr[index] = this.result;
-                    accomplish++;
-                    if (accomplish == files.length) {
-                        createImg(imgArr);
-                    }
-                }
-            })(i);
-        }
-    };
-
-    addUpload.onchange = function() {
-        //文件转换为base64
-        var files = this.files,
-            accomplish = 0,
-            imgArr = new Array(imgs.length),
-            addImgArr = new Array(files.length);
-        for (var i = 0; i < imgArr.length; i++) {
-            imgArr[i] = imgs[i].src;
-        };
-        for (var i = 0; i < files.length; i++) {
-            (function(index) {
-                var render = new FileReader();
-                render.readAsDataURL(files[index]);
-                render.onload = function() {
-                    addImgArr[index] = this.result;
-                    accomplish++;
-                    if (accomplish == files.length) {
-                        imgArr = imgArr.concat(addImgArr);
-                        createImg(imgArr);
-                    }
-                }
-            })(i);
-        }
-    };
-
-    function createImg(imgArr) {
-        //构建img对象
-        var accomplish = 0;
-        imgs = new Array(imgArr.length);
-        for (var i = 0; i < imgArr.length; i++) {
-            (function(index) {
-                var img = document.createElement("img");
-                img.src = imgArr[index];
-                img.onload = function() {
-                    imgs[index] = this;
-                    accomplish++;
-                    if (accomplish == imgs.length) {
-                        imgWidth.value = "";
-                        imgHeight.value = "";
-                        spliced(imgs);
-                        imgOrder(imgs);
-                        bind();
-                    }
-                }
-            })(i);
-        }
-    };
-
-    function spliced(imgs) {
-        maxW = 0;
-        maxH = 0;
-        for (var i = 0; i < imgs.length; i++) {
-            maxW = maxW < imgs[i].naturalWidth ? imgs[i].naturalWidth : maxW;
-            maxH = maxH < imgs[i].naturalHeight ? imgs[i].naturalHeight : maxH;
-        };
-        var width = parseInt(imgWidth.value),
-            height = parseInt(imgHeight.value);
-        maxW = width > 0 && width != NaN ? width : maxW;
-        maxH = height > 0 && height != NaN ? height : maxH;
-        imgWidth.value = maxW;
-        imgHeight.value = maxH;
-        //计算长宽
-        var cols = parseInt(colsEle.value);
-        cols = cols < 1 ? 1 : (cols > imgs.length ? imgs.length : cols);
-        colsEle.value = cols;
-        var rows = Math.ceil(imgs.length / cols),
-            w = cols * maxW,
-            h = rows * maxH;
-        draw.width = w;
-        draw.height = h;
-        //canvas 绘制
-        for (var i = 0; i < imgs.length; i++) {
-            ctx.drawImage(imgs[i], (i % cols) * maxW, parseInt(i / cols) * maxH);
-        };
-        //输出
-        var base64 = draw.toDataURL();
-        preview.src = base64;
-        base64Text.value = base64;
-        tip.style.display = "none";
-        //绑定下载按钮
-        downloadBtn.href = base64;
-        var name = imgName.value != "" ? imgName.value : "下载";
-        imgName.value = name;
-        downloadBtn.download = name + ".png";
-    };
-
-    function update() {
-        spliced(imgs);
-    };
-
-    function imgOrder(imgs) {
-        imgList.innerHTML = "";
-        for (var i = 0; i < imgs.length; i++) {
-            var li = document.createElement("li");
-            imgs[i].draggable = false;
-            li.innerHTML = "<span class='remove'>x</span>";
-            li.appendChild(imgs[i]);
-            imgList.appendChild(li);
-        }
-    };
-
-    function bind() {
-        var index;
-        var li = document.querySelectorAll("#imgList li");
-        for (var i = 0; i < li.length; i++) {
-            li[i].index = i;
-            li[i].onmousedown = function(event) {
-                index = this.index;
-            };
-            li[i].onmouseup = function(event) {
-                var offsetX = event.offsetX;
-                if (this.index != index) {
-                    if (offsetX > 50) {
-                        if (this.index == li.length - 1) {
-                            imgList.appendChild(li[index]);
-                        } else {
-                            imgList.insertBefore(li[index], li[this.index + 1]);
+        multipleUpload.onchange = function() {
+            //文件转换为base64
+            var files = this.files,
+                accomplish = 0,
+                imgArr = new Array(files.length);
+            for (var i = 0; i < files.length; i++) {
+                (function(index) {
+                    var render = new FileReader();
+                    render.readAsDataURL(files[index]);
+                    render.onload = function() {
+                        imgArr[index] = this.result;
+                        accomplish++;
+                        if (accomplish == files.length) {
+                            createImg(imgArr);
                         }
-                    } else {
-                        imgList.insertBefore(li[index], this);
                     }
+                })(i);
+            }
+        };
+
+        addUpload.onchange = function() {
+            //文件转换为base64
+            var files = this.files,
+                accomplish = 0,
+                imgArr = new Array(imgs.length),
+                addImgArr = new Array(files.length);
+            for (var i = 0; i < imgArr.length; i++) {
+                imgArr[i] = imgs[i].src;
+            };
+            for (var i = 0; i < files.length; i++) {
+                (function(index) {
+                    var render = new FileReader();
+                    render.readAsDataURL(files[index]);
+                    render.onload = function() {
+                        addImgArr[index] = this.result;
+                        accomplish++;
+                        if (accomplish == files.length) {
+                            imgArr = imgArr.concat(addImgArr);
+                            createImg(imgArr);
+                        }
+                    }
+                })(i);
+            }
+        };
+
+        function createImg(imgArr) {
+            //构建img对象
+            var accomplish = 0;
+            imgs = new Array(imgArr.length);
+            for (var i = 0; i < imgArr.length; i++) {
+                (function(index) {
+                    var img = document.createElement("img");
+                    img.src = imgArr[index];
+                    img.onload = function() {
+                        imgs[index] = this;
+                        accomplish++;
+                        if (accomplish == imgs.length) {
+                            imgWidth.value = "";
+                            imgHeight.value = "";
+                            spliced(imgs);
+                            imgOrder(imgs);
+                            bind();
+                        }
+                    }
+                })(i);
+            }
+        };
+
+        function spliced(imgs) {
+            maxW = 0;
+            maxH = 0;
+            if (imgs.length > 1) {
+                for (var i = 0; i < imgs.length; i++) {
+                    maxW = maxW < imgs[i].naturalWidth ? imgs[i].naturalWidth : maxW;
+                    maxH = maxH < imgs[i].naturalHeight ? imgs[i].naturalHeight : maxH;
+                };
+                var width = parseInt(imgWidth.value),
+                    height = parseInt(imgHeight.value);
+                maxW = width > 0 && width != NaN ? width : maxW;
+                maxH = height > 0 && height != NaN ? height : maxH;
+                imgWidth.value = maxW;
+                imgHeight.value = maxH;
+                //计算长宽
+                var cols = parseInt(colsEle.value);
+                cols = cols < 1 ? 1 : (cols > imgs.length ? imgs.length : cols);
+                colsEle.value = cols;
+                var rows = Math.ceil(imgs.length / cols),
+                    w = cols * maxW,
+                    h = rows * maxH;
+                draw.width = w;
+                draw.height = h;
+                //canvas 绘制
+                for (var i = 0; i < imgs.length; i++) {
+                    ctx.drawImage(imgs[i], (i % cols) * maxW, parseInt(i / cols) * maxH);
+                };
+                var base64 = draw.toDataURL();
+            } else if (imgs.length === 1) {
+                var base64 = imgs[0].src;
+            } else {
+                var base64 = "";
+            }
+            //输出
+            preview.src = base64;
+            base64Text.value = base64;
+            tip.style.display = "none";
+            //绑定下载按钮
+            downloadBtn.href = base64;
+            var name = imgName.value != "" ? imgName.value : "下载";
+            imgName.value = name;
+            downloadBtn.download = name + ".png";
+        };
+
+        function update() {
+            spliced(imgs);
+        };
+
+        function imgOrder(imgs) {
+            imgList.innerHTML = "";
+            for (var i = 0; i < imgs.length; i++) {
+                var li = document.createElement("li");
+                imgs[i].draggable = false;
+                li.innerHTML = "<span class='remove'>x</span>";
+                li.appendChild(imgs[i]);
+                imgList.appendChild(li);
+            }
+        };
+
+        function bind() {
+            var index;
+            var li = document.querySelectorAll("#imgList li");
+            for (var i = 0; i < li.length; i++) {
+                li[i].index = i;
+                li[i].onmousedown = function(event) {
+                    index = this.index;
+                };
+                li[i].onmouseup = function(event) {
+                    var offsetX = event.offsetX;
+                    if (this.index != index) {
+                        if (offsetX > 50) {
+                            if (this.index == li.length - 1) {
+                                imgList.appendChild(li[index]);
+                            } else {
+                                imgList.insertBefore(li[index], li[this.index + 1]);
+                            }
+                        } else {
+                            imgList.insertBefore(li[index], this);
+                        }
+                        bind();
+                        imgs = document.querySelectorAll("#imgList li img");
+                        spliced(imgs);
+                    }
+                };
+                li[i].children[0].onclick = function() {
+                    imgList.removeChild(this.parentNode);
                     bind();
+                    imgWidth.value = "";
+                    imgHeight.value = "";
                     imgs = document.querySelectorAll("#imgList li img");
                     spliced(imgs);
                 }
-            };
-            li[i].children[0].onclick = function() {
-                imgList.removeChild(this.parentNode);
-                bind();
-                imgWidth.value = "";
-                imgHeight.value = "";
-                imgs = document.querySelectorAll("#imgList li img");
-                spliced(imgs);
             }
-        }
-    };
+        };
     </script>
 </body>
 
