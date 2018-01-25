@@ -34,7 +34,8 @@
         clear = $('#clear'),
         undo = $('#undo'),
         redo = $('#redo'),
-        insertImg = $('#insertImg');
+        insertImg = $('#insertImg'),
+        downloadimg = $("#downloadimg");
     var canvas = $('#canvas'),
         canvasmask = $("#canvasmask"),
         fileimg = $('#fileimg'),
@@ -396,6 +397,15 @@
                 arrs.push(obj);
                 reDrawCurr(ctx, arrs[arrs.length - 1]);
             }
+        }
+    })
+
+    on([downloadimg], 'touchstart mousedown', function() {
+        if ('download' in document.createElement('a')) {
+            downloadimg.href = canvas.toDataURL('image/png');
+            downloadimg.download = "作品_" + new Date().getTime() + ".png"
+        } else {
+            alert("浏览器不支持下载");
         }
     })
 
