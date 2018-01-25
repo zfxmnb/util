@@ -1,6 +1,7 @@
 (function() {
     var winWidth = window.innerWidth,
         winHeight = window.innerHeight;
+    var isPhone = !!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i);
     var arrs = [];
     var redoArr = [];
     var currObj = {};
@@ -72,10 +73,10 @@
         for (var i = 0; i < arr.length; i++) {
             var method = methods.split(/\s+/);
             for (var j = 0; j < method.length; j++) {
-                if (!!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+                if (isPhone) {
                     if (method[j].indexOf('mouse') === -1) {
                         arr[i].addEventListener(method[j], function(event) {
-                            event.preventDefault();
+                            callback(event);
                         }, false)
                     }
                 } else {
@@ -400,11 +401,15 @@
     })
 
     on([downloadimg], 'touchstart mousedown', function() {
-        if ('download' in document.createElement('a')) {
+        if (isPhone) {
             downloadimg.href = canvas.toDataURL('image/png');
-            downloadimg.download = "作品_" + new Date().getTime() + ".png"
         } else {
-            alert("浏览器不支持下载");
+            if ('download' in document.createElement('a')) {
+                downloadimg.href = canvas.toDataURL('image/png');
+                downloadimg.download = "作品_" + new Date().getTime() + ".png"
+            } else {
+                alert("浏览器不支持下载");
+            }
         }
     })
 
