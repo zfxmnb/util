@@ -76,12 +76,10 @@
                     if (method[j].indexOf('mouse') === -1) {
                         arr[i].addEventListener(method[j], function(event) {
                             event.preventDefault();
-                            callback(event);
                         }, false)
                     }
                 } else {
                     arr[i].addEventListener(method[j], function(event) {
-                        event.preventDefault();
                         callback(event);
                     }, false)
                 }
@@ -337,6 +335,7 @@
         }
     });
     on([canvasmask], 'touchmove mousemove', function(e) {
+        e.preventDefault();
         if (start) {
             var curr = e.changedTouches ? e.changedTouches[0] : e;
             var obj = {
