@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>画布</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        body {
+            background: #fff;
+        }
+        
+        #canvas,
+        #canvasmask {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        
+        #canvasmask {
+            z-index: 9;
+        }
+        
+        #optionsTop,
+        #optionsBottom {
+            position: fixed;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: rgba(233, 233, 233, .8);
+            z-index: 99;
+        }
+        
+        #optionsTop {
+            top: 0;
+        }
+        
+        #optionsBottom {
+            bottom: 0;
+        }
+        
+        #optionsBottom>div,
+        #optionsTop>div {
+            display: inline-block;
+            margin-right: 2px;
+            height: 20px;
+            line-height: 20px;
+            font-size: 10px;
+            padding: 0 10px;
+        }
+        
+        #optionsBottom>div>span {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            line-height: 12px;
+            vertical-align: middle;
+            margin-top: -1px;
+            box-sizing: border-box;
+        }
+        
+        #strokeColor span {
+            background-color: #fff;
+            border: 3px solid;
+        }
+        
+        #fillColor span {
+            background-color: #000;
+            border: 1px solid;
+        }
+        
+        #optionsBottom>#linewidth span {
+            width: 12px;
+            height: 1px;
+            background-color: #000;
+        }
+        
+        #insertImg {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #insertImg input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0.001;
+            transform: scale(2);
+            -webkit-transform: scale(2);
+            transform-origin: left;
+            -webkit-transform-origin: left;
+            z-index: 9;
+        }
+        
+        #insertImg img {
+            height: 16px;
+            line-height: 20px;
+            vertical-align: middle;
+            margin-top: -2px;
+        }
+        
+        #control {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, .3);
+            z-index: 99;
+        }
+        
+        #control label {
+            display: block;
+        }
+        
+        #control label i {
+            display: inline-block;
+            margin-left: 5%;
+            font-style: normal;
+        }
+        
+        #control label a {
+            float: right;
+            display: inline-block;
+            margin: 2px 5%;
+        }
+        
+        #control input {
+            width: 90%;
+            margin: 0 5%;
+            box-sizing: border-box;
+            padding: 0 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas">
+    </canvas>
+    <canvas id="canvasmask">
+    </canvas>
+    <div id="optionsTop">
+        <div>style:
+            <select id="styleSelecter">
+                <option value="line">线</option>
+                <option value="strokerect">矩形</option>
+                <option value="strokecircle">圆形</option>
+                <option value="fillrect">矩形块</option>
+                <option value="fillcircle">圆形块</option>
+                <option value="rect">矩形&填充</option>
+                <option value="circle">圆形&填充</option>
+                <option value="fillrectimg">图片</option>
+            </select>
+        </div>
+        <div id="insertImg">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAZlBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABwbJTWAAAAInRSTlMAm5YmnQ4DlEksIQaNJBoUCpCKeHJlX1Y3hoF8bmlPQz0ybcisTgAAAOJJREFUOMvNkdkSgyAMRROIAiqI1qV2sfr/P9lJax238ux5vWduEoBzEscQxrzCua+yJCi8kJrQkPxGqExAaBGRKg97vrVJhsxwUK3ZSJ/EOd3yffVn8KjwS7/NbUYPD9GFJmF7KlcLAxp/UJ2uhKtAukR5hzNiXOZcrUZoac7ZXwiaO2NZ4JLFl7iOt4oftBI6NwsNIfa8xwpqYUIW/DLRnXBNYacTuXqAHrfQM51PrLwrcYe4cs7VyvAeO+geTSc2YAo8QgMkJWLp0ooOhTKBWgihYVDimBqslNaDk3+wcALeaJYKOljLkiQAAAAASUVORK5CYII="
+                alt="" id="img">
+            <input type="file" id="fileimg" accept="image/png, image/jpeg, image/jpg">
+        </div>
+        <div id="clear">清除</div>
+        <div id="undo">撤回</div>
+        <div id="redo">恢复</div>
+    </div>
+    <div id="optionsBottom">
+        <div id="strokeColor">边框色:
+            <span></span>
+        </div>
+        <div id="fillColor">填充色:
+            <span></span>
+        </div>
+        <div id="linewidth">线宽:
+            <span></span>
+        </div>
+        <div id="rotatedeg">角度：
+            <span>0</span>
+        </div>
+    </div>
+    <div id="control">
+        <label for="red" class="rgbalabel">
+            <i>红:</i>
+            <span>0</span>
+            <input type="range" id="red" max=255 min=0 value="0">
+        </label>
+        <label for="green" class="rgbalabel">
+            <i>绿:</i>
+            <span>0</span>
+            <input type="range" id="green" max=255 min=0 value="0">
+        </label>
+        <label for="blue" class="rgbalabel">
+            <i>蓝:</i>
+            <span>0</span>
+            <input type="range" id="blue" max=255 min=0 value="0">
+        </label>
+        <label for="opacity" class="rgbalabel">
+            <i>透明度:</i>
+            <span>1</span>
+            <input type="range" id="opacity" max=1 min=0 value="1" step=0.02>
+        </label>
+        <label for="width" class="widthlabel">
+            <i>线宽: </i>
+            <span>1</span>
+            <input type="range" id="width" max=20 min=1 value="1">
+        </label>
+        <label for="rotate" class="rotatelabel">
+            <a id="resetRotate">重置</a>
+            <i> 角度:</i>
+            <span>0</span>
+            <input type="range" id="rotate" max='180' min='-180' value="0">
+        </label>
+    </div>
+    <script src="canvas.min.js"></script>
+</body>
+
+</html>
