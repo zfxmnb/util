@@ -2,6 +2,7 @@
     var winWidth = window.innerWidth,
         winHeight = window.innerHeight;
     var isPhone = !!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i);
+    var moveOn = false;
     var arrs = [];
     var redoArr = [];
     var currObj = {};
@@ -69,20 +70,36 @@
         }
     }
 
+    var Eventhandle;
+
     function on(arr, methods, callback) {
+        Eventhandle = function(event) {
+            callback(event);
+        }
         for (var i = 0; i < arr.length; i++) {
             var method = methods.split(/\s+/);
             for (var j = 0; j < method.length; j++) {
                 if (isPhone) {
                     if (method[j].indexOf('mouse') === -1) {
-                        arr[i].addEventListener(method[j], function(event) {
-                            callback(event);
-                        }, false)
+                        arr[i].addEventListener(method[j], Eventhandle, false)
                     }
                 } else {
-                    arr[i].addEventListener(method[j], function(event) {
-                        callback(event);
-                    }, false)
+                    arr[i].addEventListener(method[j], Eventhandle, false)
+                }
+            }
+        }
+    }
+
+    function off(arr, methods, callback) {
+        for (var i = 0; i < arr.length; i++) {
+            var method = methods.split(/\s+/);
+            for (var j = 0; j < method.length; j++) {
+                if (isPhone) {
+                    if (method[j].indexOf('mouse') === -1) {
+                        arr[i].removeEventListener(method[j], Eventhandle, false)
+                    }
+                } else {
+                    arr[i].removeEventListener(method[j], Eventhandle, false)
                 }
             }
         }
@@ -301,6 +318,37 @@
         }
     }
 
+    function moveEventOn() {
+        moveOn = true;
+        on([canvasmask], 'touchmove mousemove', function(e) {
+            e.preventDefault();
+            if (start) {
+                var curr = e.changedTouches ? e.changedTouches[0] : e;
+                var obj = {
+                    x: curr.pageX,
+                    y: curr.pageY
+                }
+                if (currObj.style == "line") {
+                    var prevobj = currObj.trace[currObj.trace.length - 1];
+                    if (Math.abs(obj.x - prevobj.x) + Math.abs(obj.y - prevobj.y) > 0.3 * lineWidth) {
+                        currObj.trace.push(obj);
+                    }
+                } else {
+                    currObj.trace[1] = obj;
+                }
+                maskctx.clearRect(0, 0, winWidth, winHeight);
+                reDrawCurr(maskctx, currObj);
+            }
+        });
+    }
+
+    function moveEventOff() {
+        moveOn = false;
+        off([canvasmask], 'touchmove mousemove', function(e) {});
+    }
+
+    moveEventOn();
+
     on([canvasmask], 'touchstart mousedown', function(e) {
         hide([controlDiv]);
         var curr = e.changedTouches ? e.changedTouches[0] : e;
@@ -335,26 +383,7 @@
             start = true;
         }
     });
-    on([canvasmask], 'touchmove mousemove', function(e) {
-        e.preventDefault();
-        if (start) {
-            var curr = e.changedTouches ? e.changedTouches[0] : e;
-            var obj = {
-                x: curr.pageX,
-                y: curr.pageY
-            }
-            if (currObj.style == "line") {
-                var prevobj = currObj.trace[currObj.trace.length - 1];
-                if (Math.abs(obj.x - prevobj.x) + Math.abs(obj.y - prevobj.y) > 0.3 * lineWidth) {
-                    currObj.trace.push(obj);
-                }
-            } else {
-                currObj.trace[1] = obj;
-            }
-            maskctx.clearRect(0, 0, winWidth, winHeight);
-            reDrawCurr(maskctx, currObj);
-        }
-    });
+
     on([canvasmask], 'touchend touchcancel mouseup mouseleave', function(e) {
         if (start) {
             arrs.push(currObj);
@@ -401,6 +430,7 @@
     })
 
     on([downloadimg], 'touchstart mousedown', function() {
+        moveEventOff();
         if (isPhone) {
             downloadimg.href = canvas.toDataURL('image/png');
         } else {
@@ -411,6 +441,14 @@
                 alert("浏览器不支持下载");
             }
         }
+    });
+
+    on([downloadimg], 'touchend touchcancel mouseup', function() {
+        setTimeout(function() {
+            if (!moveOn) {
+                moveEventOn();
+            }
+        })
     })
 
     on([scSelect], 'touchstart mousedown', function(e) {
