@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    #label {
+        display: block;
+        border: 1px solid gray;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    #file {
+        display: none;
+        position: absolute;
+        width: 100%;
+        height: 200%;
+        top: -25px;
+        left: 0;
+        color: transparent;
+        border-color: transparent;
+    }
+    
+    canvas {
+        max-width: 300px;
+    }
+    
+    button {}
+    </style>
+</head>
+
+<body>
+    <label for="file" id="label">
+        <canvas id="canvas"></canvas>
+        <input type="file" id="file">
+    </label>
+    <button id="inverse">反色</button>
+    <button id="grayscale">灰度</button>
+    <button id="contrastUp">高对比</button>
+    <button id="contrastDown">低对比</button>
+    <button id="brightColored">鲜艳</button>
+    <button id="resetCvs">重置</button>
+    <a href="" id="download" download>下载</a>
+    <script>
+    var canvas = document.getElementById('canvas');
+    var download = document.getElementById('download');
+    var ctx = canvas.getContext("2d");
+    var img, imgdata, imagedata, average = [0, 0, 0];
+    if (window.navigator.userAgent.indexOf("Chrome") != -1)
+        document.getElementById('file').style.display = "initial";
+    document.getElementById('file').onchange = function() {
+        var render = new FileReader();
+        file = this.files[0];
+        render.readAsDataURL(file);
+        render.onload = function() {
+            download.href = this.result;
+            img = new Image();
+            img.src = this.result;
+            img.onload = function() {
+                var w = img.width;
+                var h = img.height;
+                canvas.width = w;
+                canvas.height = h;
+                ctx.drawImage(img, 0, 0);
+                imgdata = ctx.getImageData(0, 0, img.width, img.height);
+                imagedata = ctx.getImageData(0, 0, img.width, img.height);
+                for (var i = 0; i < imgdata.data.length; i += 4) {
+                    average[0] += imgdata.data[i];
+                    average[1] += imgdata.data[i + 1];
+                    average[2] += imgdata.data[i + 2];
+                }
+                var pixel = imgdata.data.length / 4;
+                average[0] = parseInt(average[0] / pixel);
+                average[1] = parseInt(average[1] / pixel);
+                average[2] = parseInt(average[2] / pixel);
+            }
+        }
+
+    }
+
+    document.getElementById('inverse').onclick = inverse;
+
+    function inverse() {
+        if (img) {
+            for (var i = 0; i < imgdata.data.length; i += 4) {
+                imgdata.data[i] = 255 - imgdata.data[i];
+                imgdata.data[i + 1] = 255 - imgdata.data[i + 1];
+                imgdata.data[i + 2] = 255 - imgdata.data[i + 2];
+            }
+            ctx.putImageData(imgdata, 0, 0);
+            var base64 = canvas.toDataURL("image/png");
+            download.href = base64;
+        }
+    }
+    var k = 0;
+    document.getElementById('grayscale').onclick = grayscale;
+
+    function grayscale() {
+        if (img) {
+            for (var i = 0; i < imgdata.data.length; i += 4) {
+                var grayscale = (imgdata.data[i] + imgdata.data[i + 1] + imgdata.data[i + 2]) / 3;
+                imgdata.data[i] = grayscale;
+                imgdata.data[i + 1] = grayscale;
+                imgdata.data[i + 2] = grayscale;
+            }
+            if (k == 1) {
+                resetCvs();
+                k = 0;
+            } else {
+                k = 1;
+            }
+            ctx.putImageData(imgdata, 0, 0);
+            var base64 = canvas.toDataURL("image/png");
+            download.href = base64;
+        }
+    }
+    document.getElementById('contrastUp').onclick = contrastUp;
+
+    function contrastUp() {
+        if (img) {
+            for (var i = 0; i < imgdata.data.length; i++) {
+                imgdata.data[i] = imgdata.data[i] > 127 ? (imgdata.data[i] > 245 ? 255 : imgdata.data[i] + 10) : (imgdata.data[i] < 10 ? 0 : imgdata.data[i] - 10);
+            }
+            ctx.putImageData(imgdata, 0, 0);
+            var base64 = canvas.toDataURL("image/png");
+            download.href = base64;
+        }
+    }
+    document.getElementById('contrastDown').onclick = contrastDown;
+
+    function contrastDown() {
+        if (img) {
+            for (var i = 0; i < imgdata.data.length; i += 4) {
+                imgdata.data[i] = imgdata.data[i] > average[0] ? (imgdata.data[i] < average[0] + 10 ? average[0] : imgdata.data[i] - 10) : (imgdata.data[i] < average[0] - 10 ? imgdata.data[i] + 10 : average[0]);
+                imgdata.data[i + 1] = imgdata.data[i + 1] > average[1] ? (imgdata.data[i + 1] < average[1] + 10 ? average[1] : imgdata.data[i + 1] - 10) : (imgdata.data[i + 1] < average[1] - 10 ? imgdata.data[i + 1] + 10 : average[1]);
+                imgdata.data[i + 2] = imgdata.data[i + 2] > average[1] ? (imgdata.data[i + 2] < average[1] + 10 ? average[1] : imgdata.data[i + 2] - 10) : (imgdata.data[i + 2] < average[1] - 10 ? imgdata.data[i + 2] + 10 : average[1]);
+            }
+
+            ctx.putImageData(imgdata, 0, 0);
+            var base64 = canvas.toDataURL("image/png");
+            download.href = base64;
+        }
+    }
+    document.getElementById('brightColored').onclick = brightColored;
+
+    function brightColored() {
+        if (img) {
+            for (var i = 0; i < imgdata.data.length; i += 4) {
+                var average = (imgdata.data[i] + imgdata.data[i + 1] + imgdata.data[i + 2]) / 3;
+                if (average != 255 && average != 0) {
+                    imgdata.data[i] = imgdata.data[i] > average ? (imgdata.data[i] > 245 ? 255 : imgdata.data[i] + 10) : (imgdata.data[i] < 10 ? 0 : imgdata.data[i] - 10);
+                    imgdata.data[i + 1] = imgdata.data[i + 1] > average ? (imgdata.data[i + 1] > 245 ? 255 : imgdata.data[i + 1] + 10) : (imgdata.data[i + 1] < 10 ? 0 : imgdata.data[i + 1] - 10);
+                    imgdata.data[i + 2] = imgdata.data[i + 2] > average ? (imgdata.data[i + 2] > 245 ? 255 : imgdata.data[i + 2] + 10) : (imgdata.data[i + 2] < 10 ? 0 : imgdata.data[i + 2] - 10);
+                }
+            }
+            ctx.putImageData(imgdata, 0, 0);
+            var base64 = canvas.toDataURL("image/png");
+            download.href = base64;
+        }
+    }
+
+    document.getElementById('resetCvs').onclick = resetCvs;
+
+    function resetCvs() {
+        if (img) {
+            for (var i = 0; i < imagedata.data.length; i++) {
+                imgdata.data[i] = imagedata.data[i];
+            }
+        }
+    }
+    </script>
+</body>
+
+</html>
