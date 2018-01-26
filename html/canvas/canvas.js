@@ -1,12 +1,14 @@
 (function() {
+    //宽高
     var winWidth = window.innerWidth,
         winHeight = window.innerHeight;
     var isPhone = !!navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i);
-    var moveOn = false;
-    var arrs = [];
-    var redoArr = [];
-    var currObj = {};
-    var base64;
+    var moveOn = false; //是否滑动中
+    var arrs = []; //绘画数组
+    var redoArr = []; //恢复数组
+    var currObj = {}; //当前滑动
+    var base64; //当前选择图片base64
+    var Eventhandle; //事件回调
     var start = false;
     var colorControl;
     var controlDiv = $('#control'),
@@ -31,8 +33,8 @@
         //操作栏按钮
         rgbaRangeCon = $('.rgbalabel'),
         widthRangeCon = $('.widthlabel'),
-        rotateRangeCon = $('.rotatelabel')
-    styleSelecter = $('#styleSelecter'),
+        rotateRangeCon = $('.rotatelabel'),
+        styleSelecter = $('#styleSelecter'),
         clear = $('#clear'),
         undo = $('#undo'),
         redo = $('#redo'),
@@ -59,7 +61,7 @@
         winHeight = window.innerHeight;
         canvasinit(canvas);
         canvasinit(canvasmask);
-    }
+    };
 
     function $(str) {
         var arr = str.split(/\s+/);
@@ -68,9 +70,7 @@
         } else {
             return document.querySelectorAll(str);
         }
-    }
-
-    var Eventhandle;
+    };
 
     function on(arr, methods, callback) {
         Eventhandle = function(event) {
@@ -88,7 +88,7 @@
                 }
             }
         }
-    }
+    };
 
     function off(arr, methods, callback) {
         for (var i = 0; i < arr.length; i++) {
@@ -103,19 +103,19 @@
                 }
             }
         }
-    }
+    };
 
     function show(arr) {
         for (var i = 0; i < arr.length; i++) {
             arr[i].style.display = "initial";
         }
-    }
+    };
 
     function hide(arr) {
         for (var i = 0; i < arr.length; i++) {
             arr[i].style.display = "none";
         }
-    }
+    };
 
     function canvasinit(cvs, c) {
         cvs.style.width = winWidth + "px";
@@ -130,7 +130,7 @@
             context.lineCap = "round";
             return context
         }
-    }
+    };
 
     function initColor(colorArr) {
         redRange.value = colorArr[0];
@@ -141,7 +141,7 @@
         blueRange.previousElementSibling.innerText = colorArr[2];
         opacityRange.value = colorArr[3];
         opacityRange.previousElementSibling.innerText = colorArr[3];
-    }
+    };
 
     function setColor(colorArr) {
         if (colorControl === 1) {
@@ -154,18 +154,18 @@
             fillColorArr = colorArr;
             fcSelectSpan.style.background = fillColor;
         }
-    }
+    };
 
     function setWidth(width) {
         lineWidth = width;
         widthSelectSpan.style.height = (lineWidth > 12 ? 12 : lineWidth) + "px";
         widthSelectSpan.style.background = strokeColor;
-    }
+    };
 
     function setRotate(deg) {
         rotateDeg = deg;
         rotateSelectSpan.innerText = deg;
-    }
+    };
 
     function drawLine(curr, context) {
         var arr = curr.trace;
@@ -181,7 +181,7 @@
             context.lineTo(arr[arr.length - 1].x, arr[arr.length - 1].y);
         }
         context.stroke();
-    }
+    };
 
     function drawRect(curr, status, context) {
         var arr = curr.trace;
@@ -204,7 +204,7 @@
                 context.fill();
             }
         }
-    }
+    };
 
     function drawCircle(curr, status, context) {
         var arr = curr.trace;
@@ -226,7 +226,7 @@
                 context.fill();
             }
         }
-    }
+    };
 
     function drawImage(curr, context) {
         var arr = curr.trace;
@@ -243,7 +243,7 @@
                 context.drawImage(image, 0, 0, curr.imgWidth, curr.imgHeight, arr[0].x, arr[0].y, dW, dH);
             })
         }
-    }
+    };
 
     function rotate(context, x, y, deg, callback) {
         context.translate(x, y); //将绘图原点移到画布中点
@@ -254,7 +254,7 @@
         context.translate(x, y);
         context.rotate((Math.PI / 180) * -deg);
         context.translate(-x, -x);
-    }
+    };
 
     function selectStyle(curr, context) {
         switch (curr.style) {
@@ -283,7 +283,7 @@
                 drawImage(curr, context);
                 break;
         }
-    }
+    };
 
     function reDrawAll() {
         ctx.clearRect(0, 0, winWidth, winHeight);
@@ -295,14 +295,14 @@
                 selectStyle(arrs[i], ctx);
             }
         }
-    }
+    };
 
     function reDrawCurr(context, curr) {
         if (curr.trace && curr.trace.length > 1) {
             selectStyle(curr, context);
         }
-    }
-
+    };
+    //选择图片
     var render = new FileReader();
     fileimg.onchange = function() {
         var file = this;
@@ -316,7 +316,7 @@
         } else {
             alert("图片不能大于2MB");
         }
-    }
+    };
 
     function moveEventOn() {
         moveOn = true;
@@ -340,12 +340,12 @@
                 reDrawCurr(maskctx, currObj);
             }
         });
-    }
+    };
 
     function moveEventOff() {
         moveOn = false;
         off([canvasmask], 'touchmove mousemove', function(e) {});
-    }
+    };
 
     moveEventOn();
 
@@ -402,6 +402,7 @@
         ctx.clearRect(0, 0, winWidth, winHeight);
         ctx.beginPath();
     });
+
     on([undo], "touchstart mousedown", function() {
         if (arrs.length > 0) {
             var obj = arrs.pop();
@@ -427,7 +428,7 @@
                 reDrawCurr(ctx, arrs[arrs.length - 1]);
             }
         }
-    })
+    });
 
     on([downloadimg], 'touchstart mousedown', function() {
         moveEventOff();
@@ -449,7 +450,7 @@
                 moveEventOn();
             }
         })
-    })
+    });
 
     on([scSelect], 'touchstart mousedown', function(e) {
         show([controlDiv]);
