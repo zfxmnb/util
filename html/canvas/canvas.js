@@ -148,18 +148,18 @@
             strokeColor = "rgba(" + colorArr[0] + "," + colorArr[1] + "," + colorArr[2] + "," + colorArr[3] + ")";
             strokeColorArr = colorArr;
             scSelectSpan.style.borderColor = strokeColor;
-            widthSelectSpan.style.background = strokeColor;
         } else {
             fillColor = "rgba(" + colorArr[0] + "," + colorArr[1] + "," + colorArr[2] + "," + colorArr[3] + ")";
             fillColorArr = colorArr;
             fcSelectSpan.style.background = fillColor;
+            widthSelectSpan.style.background = fillColor;
         }
     }
 
     function setWidth(width) {
         lineWidth = width;
         widthSelectSpan.style.height = (lineWidth > 12 ? 12 : lineWidth) + "px";
-        widthSelectSpan.style.background = strokeColor;
+        widthSelectSpan.style.background = fillColor;
     }
 
     function setRotate(deg) {
@@ -175,7 +175,6 @@
             context.strokeStyle = curr.fillColor;
             context.moveTo(arr[0].x, arr[0].y);
             for (var i = 1; i < arr.length - 2; i += 3) {
-                //context.quadraticCurveTo(arr[i].x, arr[i].y, arr[i + 1].x, arr[i + 1].y);
                 context.bezierCurveTo(arr[i].x, arr[i].y, arr[i + 1].x, arr[i + 1].y, arr[i + 2].x, arr[i + 2].y)
             }
             context.lineTo(arr[arr.length - 1].x, arr[arr.length - 1].y);
@@ -350,6 +349,7 @@
     moveEventOn();
 
     on([canvasmask], 'touchstart mousedown', function(e) {
+        redoArr = [];
         hide([controlDiv]);
         var curr = e.changedTouches ? e.changedTouches[0] : e;
         var obj = {
@@ -385,7 +385,7 @@
     });
 
     on([canvasmask], 'touchend touchcancel mouseup mouseleave', function(e) {
-        if (start) {
+        if (start && currObj.trace.length > 1) {
             arrs.push(currObj);
             reDrawCurr(ctx, currObj);
             currObj = {};
@@ -413,19 +413,8 @@
     });
     on([redo], "touchstart mousedown", function() {
         if (redoArr.length > 0) {
-            var obj;
-            for (var i = redoArr.length - 1; i > -1; i--) {
-                if (redoArr[i].pos == arrs.length) {
-                    obj = redoArr.pop();
-                    break;
-                } else {
-                    redoArr.pop();
-                }
-            }
-            if (obj) {
-                arrs.push(obj);
-                reDrawCurr(ctx, arrs[arrs.length - 1]);
-            }
+            arrs.push(redoArr.pop());
+            reDrawCurr(ctx, arrs[arrs.length - 1]);
         }
     })
 
