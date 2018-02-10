@@ -144,6 +144,41 @@
             box-sizing: border-box;
             padding: 0 5px;
         }
+        .dialog{
+            display: none;
+        }
+        .dialog .overlay{
+            position: fixed;
+            left:0;
+            top:0;
+            z-index:99;
+            height:100%;
+            width:100%;
+            background-color:rgba(0,0,0,.4);
+        } 
+        .dialog .dialogcon{
+            position: fixed;
+            top:50%;
+            left:50%;
+            transform: translate(-50%);
+            -webkit-transform: translate(-50%);
+            z-index:99;
+            width:240px;
+            padding:20px;
+            text-align: center;
+            background-color:#fff;
+            border-radius:5px;
+        }
+        .dialog p{
+            line-height: 24px;
+        }
+        .dialog button{
+            border:none;
+            background:rgb(25,150,255);
+            padding:3px 6px;
+            color:#fff;
+            border-radius:3px;
+        }
     </style>
 </head>
 
@@ -156,6 +191,7 @@
         <div>类型:
             <select id="styleSelecter">
                 <option value="line">线</option>
+                <option value="drawPolygon">任意形状</option>
                 <option value="strokerect">矩形</option>
                 <option value="strokecircle">圆形</option>
                 <option value="fillrect">矩形块</option>
@@ -221,6 +257,13 @@
             <span>0</span>
             <input type="range" id="rotate" max='180' min='-180' value="0">
         </label>
+    </div>
+    <div class="dialog" id="dialog">
+        <div class="overlay"></div>
+        <div class="dialogcon">
+            <p>是否播放动画</p>
+            <button id="animation">开始</button>
+        </div>
     </div>
     <script src="canvas.min.js"></script>
 </body>
